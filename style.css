@@ -1,3 +1,19 @@
+/* #EEF1DB */
+/* #E3E1C9 */
+/* #C9C7AF */
+
+body {
+  background-color: #485B63;
+}
+
+main {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  height: 600px;
+  justify-content: center;
+}
+
 canvas {
-  border: 2px solid black;
+  border: 5px solid black;
 }
