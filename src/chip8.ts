@@ -1,3 +1,4 @@
+import { terminal } from "virtual:terminal";
 import { Keyboard } from "./keyboard";
 import { Renderer } from "./renderer";
 
@@ -13,6 +14,7 @@ let then: number;
 let elapsed: number;
 
 function init() {
+  terminal.log("Chip8 init");
   fpsInterval = 1000 / fps;
   then = Date.now();
   startTime = then;
