@@ -1,9 +1,11 @@
 import { terminal } from "virtual:terminal";
 import { Keyboard } from "./keyboard";
 import { Renderer } from "./renderer";
+import { Speaker } from "./speaker";
 
 let renderer = new Renderer(10);
 let keyboard = new Keyboard();
+let speaker = new Speaker();
 
 let loop: number;
 let fps = 60;
