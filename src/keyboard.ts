@@ -1,5 +1,5 @@
 export class Keyboard {
-  private KEYMAP = {
+  private keymap = {
     49: 0x1, // 1
     50: 0x2, // 2
     51: 0x3, // 3
@@ -17,8 +17,10 @@ export class Keyboard {
     67: 0xb, // C
     86: 0xf, // V
   };
-  private keysPressed: [];
-  private onNextKeyPress: (() => void) | null;
+
+  // key in keyof typeof this.keymap
+  private keysPressed: { [key: number]: boolean };
+  private onNextKeyPress: ((key: number) => void) | null;
 
   constructor() {
     this.keysPressed = {};
@@ -30,14 +32,22 @@ export class Keyboard {
     window.addEventListener("keyup", this.onKeyUp.bind(this), false);
   }
 
-  public onKeyUp() {}
-
-  public isKeyPressed(keyCode: string) {
+  public isKeyPressed(keyCode: number) {
     return this.keysPressed[keyCode];
   }
 
   public onKeyDown(event: KeyboardEvent) {
-    let key = this.KEYMAP[event.which];
+    let key: number = this.keymap[event.which];
     this.keysPressed[key] = true;
+
+    if (this.onNextKeyPress !== null && key) {
+      this.onNextKeyPress(key);
+      this.onNextKeyPress = null;
+    }
+  }
+
+  public onKeyUp(event: KeyboardEvent) {
+    let key = this.keymap[event.which];
+    this.keysPressed[key] = false;
   }
 }

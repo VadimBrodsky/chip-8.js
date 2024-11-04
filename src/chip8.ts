@@ -1,6 +1,9 @@
+import { Keyboard } from "./keyboard";
 import { Renderer } from "./renderer";
 
 let renderer = new Renderer(10);
+let keyboard = new Keyboard();
+
 let loop: number;
 let fps = 60;
 let fpsInterval: number;
