@@ -2,6 +2,7 @@ import { terminal } from "virtual:terminal";
 import { Keyboard } from "./keyboard";
 import { Renderer } from "./renderer";
 import { Speaker } from "./speaker";
+import { InputOutput } from "./io";
 
 let renderer = new Renderer(10);
 let keyboard = new Keyboard();
@@ -39,3 +40,11 @@ function step() {
 }
 
 init();
+
+InputOutput.fetchRom("/roms/1-chip8-logo.ch8")
+  .then(() => {
+    terminal.log("successfully fetched the rom");
+  })
+  .catch(() => {
+    terminal.error("failed to fetch the rom");
+  });
