@@ -33,8 +33,7 @@ export class CPU {
   }
 
   public loadSpritesIntoMemory() {
-    // Array of hex values for each sprite
-    // Each sprite is 5 bytes
+    // Array of hex values for each sprite, each sprite is 5 bytes
     // prettier-ignore
     const sprites = [
         0xF0, 0x90, 0x90, 0x90, 0xF0, // 0
@@ -67,11 +66,50 @@ export class CPU {
     }
   }
 
-  // 1-chip8-logo.ch8
-  public async loadRom(romUrl: string) {
-    let response = await fetch(romUrl);
-    let buffer = await response.arrayBuffer();
-    let rom = new Uint8Array(buffer);
-    this.loadProgramIntoMemory(rom);
+  public cycle() {
+    for (let i = 0; i < this.speed; i++) {
+      if (!this.paused) {
+        let optcode = (this.memory[this.pc] << 8) | this.memory[this.pc + 1];
+        this.executeInstruction(optcode);
+      }
+    }
+
+    if (!this.paused) {
+      this.updateTimers();
+    }
+
+    this.playSound();
+    this.renderer.render();
+  }
+
+  public executeInstruction(optcode: number) {
+    // increment the program counter to prepare it for the next instruction
+    // each instruction is 2 bytes long, so increment it by 2
+    this.pc += 2;
+    // we only need the 2nd nibble, so grab the value of the 2nd nibble
+    // and shift it right 8 bits to get rid of everything but that 2nd nibble
+    let x = (optcode & 0X0F00) >> 8;
+    // we only need the 3rd nibble, so grab the value of the 3rd nibble
+    // and shift it right 4 bits to get rid of everything but that 3rd nibble
+    let y = (optcode & 0X00F0) >> 4;
+  }
+
+  public updateTimers() {
+    if (this.delayTimer > 0) {
+      this.delayTimer -= 1;
+    }
+
+    // keep playing the sound if the soundTimer is set
+    if (this.soundTimer > 0) {
+      this.soundTimer -= 1;
+    }
+  }
+
+  public playSound() {
+    if (this.soundTimer > 0) {
+      this.speaker.play(440);
+    } else {
+      this.speaker.stop();
+    }
   }
 }
