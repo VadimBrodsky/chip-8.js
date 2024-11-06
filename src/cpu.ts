@@ -82,16 +82,105 @@ export class CPU {
     this.renderer.render();
   }
 
-  public executeInstruction(optcode: number) {
+  public executeInstruction(opcode: number) {
     // increment the program counter to prepare it for the next instruction
     // each instruction is 2 bytes long, so increment it by 2
     this.pc += 2;
     // we only need the 2nd nibble, so grab the value of the 2nd nibble
     // and shift it right 8 bits to get rid of everything but that 2nd nibble
-    let x = (optcode & 0X0F00) >> 8;
+    let x = (opcode & 0x0f00) >> 8;
     // we only need the 3rd nibble, so grab the value of the 3rd nibble
     // and shift it right 4 bits to get rid of everything but that 3rd nibble
-    let y = (optcode & 0X00F0) >> 4;
+    let y = (opcode & 0x00f0) >> 4;
+
+    switch (opcode & 0xf000) {
+      case 0x0000:
+        switch (opcode) {
+          case 0x00e0:
+            break;
+          case 0x00ee:
+            break;
+        }
+        break;
+      case 0x1000:
+        break;
+      case 0x2000:
+        break;
+      case 0x3000:
+        break;
+      case 0x4000:
+        break;
+      case 0x5000:
+        break;
+      case 0x6000:
+        break;
+      case 0x7000:
+        break;
+      case 0x8000:
+        switch (opcode & 0xf) {
+          case 0x0:
+            break;
+          case 0x1:
+            break;
+          case 0x2:
+            break;
+          case 0x3:
+            break;
+          case 0x4:
+            break;
+          case 0x5:
+            break;
+          case 0x6:
+            break;
+          case 0x7:
+            break;
+          case 0xe:
+            break;
+        }
+        break;
+      case 0x9000:
+        break;
+      case 0xa000:
+        break;
+      case 0xb000:
+        break;
+      case 0xc000:
+        break;
+      case 0xd000:
+        break;
+      case 0xe000:
+        switch (opcode & 0xff) {
+          case 0x9e:
+            break;
+          case 0xa1:
+            break;
+        }
+        break;
+      case 0xf000:
+        switch (opcode & 0xff) {
+          case 0x07:
+            break;
+          case 0x0a:
+            break;
+          case 0x15:
+            break;
+          case 0x18:
+            break;
+          case 0x1e:
+            break;
+          case 0x29:
+            break;
+          case 0x33:
+            break;
+          case 0x55:
+            break;
+          case 0x65:
+            break;
+        }
+        break;
+      default:
+        throw new Error("Unknown opcode " + opcode);
+    }
   }
 
   public updateTimers() {
