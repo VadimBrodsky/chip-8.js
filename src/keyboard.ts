@@ -20,7 +20,7 @@ export class Keyboard {
 
   // key in keyof typeof this.keymap
   private keysPressed: { [key: number]: boolean };
-  private onNextKeyPress: ((key: number) => void) | null;
+  public  onNextKeyPress: ((key: number) => void) | null;
 
   constructor() {
     this.keysPressed = {};
