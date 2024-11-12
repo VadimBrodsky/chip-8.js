@@ -3,10 +3,12 @@ import { Keyboard } from "./keyboard";
 import { Renderer } from "./renderer";
 import { Speaker } from "./speaker";
 import { InputOutput } from "./io";
+import { CPU } from "./cpu";
 
 let renderer = new Renderer(10);
 let keyboard = new Keyboard();
 let speaker = new Speaker();
+let cpu = new CPU({ renderer, keyboard, speaker });
 
 let loop: number;
 let fps = 60;
@@ -16,14 +18,16 @@ let now: number;
 let then: number;
 let elapsed: number;
 
-function init() {
+async function init() {
   terminal.log("Chip8 init");
   fpsInterval = 1000 / fps;
   then = Date.now();
   startTime = then;
 
-  renderer.testRender();
-  renderer.render();
+  const rom = await InputOutput.fetchRom("/roms/1-chip8-logo.ch8");
+
+  cpu.loadSpritesIntoMemory();
+  cpu.loadProgramIntoMemory(rom);
 
   loop = requestAnimationFrame(step);
 }
@@ -33,18 +37,10 @@ function step() {
   elapsed = now - then;
 
   if (elapsed > fpsInterval) {
-    // cycle the CPU
+    cpu.cycle();
   }
 
   loop = requestAnimationFrame(step);
 }
 
 init();
-
-InputOutput.fetchRom("/roms/1-chip8-logo.ch8")
-  .then(() => {
-    terminal.log("successfully fetched the rom");
-  })
-  .catch(() => {
-    terminal.error("failed to fetch the rom");
-  });
